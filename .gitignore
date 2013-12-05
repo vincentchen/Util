@@ -1,0 +1,6 @@
+.idea
+iBaby.iml
+.svn
+target
+doc
+src/main/resources/application.local.properties

@@ -1,0 +1,2 @@
+mvn install:install-file -DgroupId=com.chinavnet -DartifactId=zx.service -Dpackaging=jar -Dversion=1.0 -Dfile=CommissionPSO.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.vincentchan -DartifactId=gps.roughlocation -Dpackaging=jar -Dversion=1.0 -Dfile=roughlocation.jar -DgeneratePom=true

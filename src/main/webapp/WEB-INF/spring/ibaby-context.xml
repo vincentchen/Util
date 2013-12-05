@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+    <!--项目无需国际化，但是需要一些属性-->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:i18n/messages"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven/>
+
+    <!--conversion-service="conversionService"-->
+
+    <bean id="conversionService" class="org.springframework.format.support.DefaultFormattingConversionService"/>
+
+    <mvc:view-controller path="/" view-name="forward:/index"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="info.vincentchan.interceptor.AuthInterceptor">
+                <property name="exceptedUrls">
+                    <list>
+                        <value>/index</value>
+                        <value>/login</value>
+                        <value>/resources</value>
+                        <value>/attach</value>
+                        <value>/logout</value>
+                        <value>/register</value>
+                        <value>/password/reset</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/attach/**" location="/attach/"/>
+    <mvc:resources mapping="/appstore/**" location="/appstore/"/>
+
+    <!--异常处理还是要用@ExceptionHandler，因为Spring已经注册了默认的三个异常处理类-->
+    <!--<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        &lt;!&ndash; 定义默认的异常处理页面，当该异常类型的注册时使用 &ndash;&gt;
+        <property name="defaultErrorView" value="error"></property>
+        &lt;!&ndash; 定义异常处理页面用来获取异常信息的变量名，默认名为exception &ndash;&gt;
+        &lt;!&ndash;<property name="exceptionAttribute" value="ex"></property>&ndash;&gt;
+        &lt;!&ndash; 定义需要特殊处理的异常，用类名或完全路径名作为key，异常以页名作为值 &ndash;&gt;
+        <property name="exceptionMappings">
+            <props>
+                <prop key="IOException">error/ioexp</prop>
+                <prop key="java.sql.SQLException">error/sqlexp</prop>
+                <prop key="TypeMismatchException">error</prop>
+            </props>
+        </property>
+    </bean>-->
+    <!--<bean class="com.qztcy.exceptions.ExceptionHandler">
+        <property name="order" value="3"/>
+    </bean>-->
+
+    <!--<mvc:default-servlet-handler/>-->
+
+    <!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="1"/>
+        <property name="mediaTypes">
+            <map>
+                <entry key="xml" value="application/xml"/>
+                <entry key="json" value="application/json"/>
+                <!--<entry key="rss" value="application/rss+xml" />-->
+            </map>
+        </property>
+
+        <property name="defaultViews">
+            <list>
+                <!-- RSS View -->
+                <!--<bean class="com.mkyong.common.rss.RssFeedView" />-->
+
+                <!-- JAXB XML View -->
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <constructor-arg>
+                        <ref bean="jaxb2Marshaller"/>
+                    </constructor-arg>
+                    <property name="modelKey" value="result"/>
+                </bean>
+
+                <!-- JSON View -->
+                <bean class="info.vincentchan.view.json.MappingJacksonJsonView">
+                    <property name="modelKey" value="result"/>
+                </bean>
+            </list>
+        </property>
+        <!--<property name="ignoreAcceptHeader" value="true"/>-->
+    </bean>
+
+    <!-- If no extension matched, use JSP view -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="2"/>
+        <property name="prefix">
+            <value>/WEB-INF/views/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+    <bean id="jaxb2Marshaller" class="info.vincentchan.marshaller.ClasspathScanningJaxb2Marshaller">
+        <property name="basePackages">
+            <list>
+                <value>com.vincentchan.ibaby.entities</value>
+                <value>com.vincentchan.ibaby.dto</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--<bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang"/>
+    </bean>
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en"/>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <ref bean="localeChangeInterceptor"/>
+        </property>
+    </bean>-->
+
+    <!-- Only needed because we install custom converters to support the examples in the org.springframewok.samples.mvc.convert package -->
+    <!--<beans:bean username="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+         <beans:property name="formatters">
+             <beans:bean class="org.springframework.samples.mvc.convert.MaskFormatAnnotationFormatterFactory" />
+         </beans:property>
+     </beans:bean>-->
+
+    <!--dataSource-->
+    <!--<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName">
+            <value>jdbc/OracleDB</value>
+        </property>
+    </bean>-->
+
+    <context:component-scan base-package="com.vincentchan.ibaby.mvc" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <context:component-scan base-package="com.vincentchan.ibaby.dvincentchanom.qztc.ibaby.service"/>
+
+    <!-- Spring Data Jpa配置 -->
+    <jpa:repositories base-package="com.vincentchan.ibaby.jpa"
+                      transaction-manager-ref="transactionManager"
+                      entity-manager-factory-ref="entityManagerFactory"/>
+
+</beans>
