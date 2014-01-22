@@ -1,15 +1,5 @@
 package info.vincentchan.mvc;
 
-import info.vincentchan.ibaby.dto.LoginUser;
-import info.vincentchan.ibaby.dto.Result;
-import info.vincentchan.ibaby.dto.ResultCode;
-import info.vincentchan.ibaby.entities.DocLocate;
-import info.vincentchan.ibaby.entities.User;
-import info.vincentchan.ibaby.mvc.AbstractController;
-import info.vincentchan.ibaby.service.DocManager;
-import info.vincentchan.ibaby.service.UserManager;
-import info.vincentchan.ibaby.util.Config;
-import info.vincentchan.ibaby.util.Utils;
 import info.vincentchan.util.DigestHelper;
 import info.vincentchan.util.Servlets;
 import org.apache.commons.io.IOUtils;

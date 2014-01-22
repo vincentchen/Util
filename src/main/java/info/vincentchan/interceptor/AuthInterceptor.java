@@ -1,8 +1,5 @@
 package info.vincentchan.interceptor;
 
-import info.vincentchan.ibaby.AuthException;
-import info.vincentchan.ibaby.entities.User;
-import info.vincentchan.ibaby.service.UserManager;
 import info.vincentchan.util.DigestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

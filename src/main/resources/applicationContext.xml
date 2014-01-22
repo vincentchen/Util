@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+       default-lazy-init="true">
+    <description>Spring公共配置</description>
+
+    <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+    <context:component-scan base-package="info.vincentchan.task">
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="scheduleTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask" lazy-init="false">
+        <property name="runnable" ref="jobTask"/>
+        <property name="period">
+            <value>${job.period}</value>
+        </property>
+        <property name="delay">
+            <value>${job.delay}</value>
+        </property>
+    </bean>
+
+    <bean id="scheduleFactory" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean"
+          lazy-init="false">
+    <property name="scheduledExecutorTasks">
+            <list>
+                <ref bean="scheduleTask"/>
+            </list>
+        </property>
+    </bean>
+    <!--<task:annotation-driven/>-->
+
+    <!-- Jpa 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean name="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean name="dwJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- production/local development环境 -->
+    <beans profile="production">
+        <context:property-placeholder location="classpath*:/application.properties"/>
+        <!-- 数据源配置, 使用DBCP数据库连接池 -->
+        <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+            <jee:jndi-lookup jndi-name="${ds.jndi}"/>
+        </bean>
+
+        <!--数据仓库-->
+        <bean id="dw" class="org.springframework.jndi.JndiObjectFactoryBean">
+            <jee:jndi-lookup jndi-name="${dw.jndi}"/>
+        </bean>
+    </beans>
+
+    <!-- dev环境 -->
+    <beans profile="dev">
+        <context:property-placeholder location="classpath*:/application.properties,classpath*:/local.properties"/>
+        <!-- 数据源配置, 使用DBCP数据库连接池 -->
+        <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName">
+                <value>${jdbc.driver}</value>
+            </property>
+            <property name="url">
+                <value>${jdbc.url}</value>
+            </property>
+            <property name="username">
+                <value>${jdbc.username}</value>
+            </property>
+            <property name="password">
+                <value>${jdbc.password}</value>
+            </property>
+        </bean>
+
+        <!--数据仓库-->
+        <bean id="dw" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName">
+                <value>${dw.jdbc.driver}</value>
+            </property>
+            <property name="url">
+                <value>${dw.jdbc.url}</value>
+            </property>
+            <property name="username">
+                <value>${dw.jdbc.username}</value>
+            </property>
+            <property name="password">
+                <value>${dw.jdbc.password}</value>
+            </property>
+        </bean>
+    </beans>
+</beans>
