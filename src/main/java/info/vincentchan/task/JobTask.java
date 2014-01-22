@@ -1,12 +1,8 @@
 package info.vincentchan.task;
 
-import com.cmbchina.xm.dao.ApplyDao;
-import com.cmbchina.xm.domain.ApplyInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import javax.inject.Inject;
 
 /**
  * Author: Vincent Chan
