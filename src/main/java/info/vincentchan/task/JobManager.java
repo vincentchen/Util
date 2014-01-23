@@ -1,8 +1,5 @@
 package info.vincentchan.task;
 
-import com.cmbchina.xm.dao.ApplyDao;
-import com.cmbchina.xm.domain.Server;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -33,9 +30,6 @@ public class JobManager {
             }
             Job job = new Job(jobId);
             jobs.put(jobId, job);
-            job.setServer(server);
-            job.setApplyDao(applyDao);
-            job.setJobManager(this);
             job.setDaemon(true);
             job.start();
             return true;
@@ -45,9 +39,6 @@ public class JobManager {
     public void removeJob(Long jobId) {
         synchronized (lock) {
             Job job = jobs.remove(jobId);
-            job.setJobManager(null);
-            job.setApplyDao(null);
-            job.setServer(null);
         }
     }
 }
