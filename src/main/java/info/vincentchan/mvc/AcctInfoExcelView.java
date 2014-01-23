@@ -18,7 +18,7 @@ public class AcctInfoExcelView extends AbstractExcelView {
     protected void buildExcelDocument(Map model, HSSFWorkbook workbook, HttpServletRequest request,
                                       HttpServletResponse response) throws Exception {
         List<AcctInfo> acctInfos = (List) model.get("acctInfos");
-        //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         HSSFSheet sheet = workbook.createSheet();
 
         HSSFRow header = sheet.createRow(0);

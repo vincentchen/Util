@@ -15,7 +15,6 @@ public class JobTask implements Runnable {
     @Override
     public void run() {
         logger.info("开始扫描未完成的申请单任务！");
-
         logger.info("结束扫描未完成的申请单任务！");
     }
 }

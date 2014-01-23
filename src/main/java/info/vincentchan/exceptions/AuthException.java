@@ -5,7 +5,9 @@ package info.vincentchan.exceptions;
  * @since 2012.04.17 09:06
  */
 public class AuthException extends Exception {
+
     public AuthException(String message) {
         super(message);
     }
+
 }

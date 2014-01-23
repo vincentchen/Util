@@ -67,5 +67,4 @@ public abstract class AbstractIText5PdfView extends AbstractView {
     protected abstract void buildPdfDocument(Map<String, Object> model,
                                              Document document, PdfWriter writer, HttpServletRequest request,
                                              HttpServletResponse response) throws Exception;
-
 }
