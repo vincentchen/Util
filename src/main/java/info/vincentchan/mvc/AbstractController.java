@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 抽象Controller，提供异常处理，所有的Controller都继承于此
- *
+ *lalalal
  * @author Vincent.Chan
  * @since 2012.04.13 19:21
  */
