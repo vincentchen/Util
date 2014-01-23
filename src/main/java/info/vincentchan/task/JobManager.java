@@ -2,7 +2,6 @@ package info.vincentchan.task;
 
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
