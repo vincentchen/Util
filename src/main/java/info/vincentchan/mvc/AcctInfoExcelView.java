@@ -1,6 +1,5 @@
 package info.vincentchan.mvc;
 
-import com.cmbchina.xm.domain.AcctInfo;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

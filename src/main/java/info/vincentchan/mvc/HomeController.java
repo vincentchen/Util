@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,14 +32,6 @@ import java.util.Random;
 @Controller
 public class HomeController extends AbstractController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    @Inject
-    private UserManager userManager;
-
-    @Inject
-    private DocManager docManager;
-
-    @Inject
-    private Config config;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public void testGet(@RequestParam String test) {
